@@ -3,6 +3,7 @@ module github.com/hamdiBouhani/GopherNet-golang
 go 1.21.0
 
 require (
+	github.com/brianvoe/gofakeit/v5 v5.11.2
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/uuid v1.3.1

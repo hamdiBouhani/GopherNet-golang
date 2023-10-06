@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/hamdiBouhani/GopherNet-golang/mocks"
 	"github.com/hamdiBouhani/GopherNet-golang/storage/pg"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/sqlite"
@@ -91,6 +92,46 @@ func TestInitialBurrowStates(t *testing.T) {
 
 	if len(res) != 5 {
 		t.Error("burrows should have 5 elements")
+		t.Fail()
+		return
+	}
+
+	err = svc.Storage.Drop()
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+}
+
+func TestRentBurrow(t *testing.T) {
+	svc := MockBurrowService()
+
+	newBurrow := mocks.MockBurrow(false)
+
+	err := svc.Storage.CreateBurrow(newBurrow)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	err = svc.RentBurrow(newBurrow.ID)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	updatedBurrow, err := svc.Storage.ShowBurrow(newBurrow.ID)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	if !updatedBurrow.Occupied {
+		t.Error("burrow should be occupied")
 		t.Fail()
 		return
 	}

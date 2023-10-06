@@ -78,3 +78,49 @@ func (svc *BurrowService) InitialBurrowStates() error {
 	}
 	return nil
 }
+
+func (svc *BurrowService) UpdateBurrow(id int64) error {
+
+	burrow, err := svc.Storage.ShowBurrow(id)
+	if err != nil {
+		return err
+	}
+
+	if err := svc.Storage.SaveBurrow(burrow); err != nil {
+		return err
+	}
+	return nil
+
+}
+
+// Rent Burrow: Implement an HTTP REST endpoint to handle requests for rentinga burrow.
+// If a burrow is available (not occupied and hasn't collapsed), the burrowwill be rented and it’s status will be updated.
+// Otherwise, return an appropriateerror message.
+func (svc *BurrowService) RentBurrow(id int64) error {
+
+	burrow, err := svc.Storage.ShowBurrow(id)
+	if err != nil {
+		return err
+	}
+
+	if burrow.Occupied || burrow.Age > 25 {
+		return fmt.Errorf("burrow is not available")
+	}
+
+	burrow.Occupied = true
+
+	if err := svc.Storage.SaveBurrow(burrow); err != nil {
+		return err
+	}
+	return nil
+
+}
+
+// Burrow Status: Provide a REST endpoint to fetch the current status of theburrows
+func (svc *BurrowService) BurrowStatus() ([]*model.Burrow, error) {
+	res, err := svc.Storage.IndexBurrow()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
