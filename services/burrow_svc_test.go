@@ -7,8 +7,28 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/hamdiBouhani/GopherNet-golang/storage/pg"
 	"github.com/joho/godotenv"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
+
+func MockBurrowService() *BurrowService {
+	// github.com/mattn/go-sqlite3
+	db, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+	if err != nil {
+		fmt.Println(err)
+		panic("failed to connect database")
+	}
+	service := &BurrowService{Storage: &pg.DBConn{Db: db}}
+	err = service.Storage.Migrate()
+	if err != nil {
+		fmt.Println(err)
+		panic("failed to connect database")
+	}
+
+	return service
+}
 
 func init() {
 	err := godotenv.Load()
@@ -50,5 +70,35 @@ func TestInitialStates(t *testing.T) {
 		t.Fail()
 		return
 	}
+}
 
+func TestInitialBurrowStates(t *testing.T) {
+
+	svc := MockBurrowService()
+
+	err := svc.InitialBurrowStates()
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+	res, err := svc.Storage.IndexBurrow() // Index the burrows
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	if len(res) != 5 {
+		t.Error("burrows should have 5 elements")
+		t.Fail()
+		return
+	}
+
+	err = svc.Storage.Drop()
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
 }

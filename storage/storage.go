@@ -10,4 +10,5 @@ type Storage interface {
 
 	CreateBurrow(burrow *model.Burrow) error
 	CreateManyBurrow(burrowList []*model.Burrow) error
+	IndexBurrow() ([]*model.Burrow, error)
 }

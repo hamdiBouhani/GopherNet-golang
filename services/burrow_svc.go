@@ -14,11 +14,11 @@ import (
 )
 
 type BurrowService struct {
-	storage storage.Storage
+	Storage storage.Storage
 }
 
 func NewBurrowService(storage storage.Storage) *BurrowService {
-	return &BurrowService{storage: storage}
+	return &BurrowService{Storage: storage}
 }
 
 func InitialStates() ([]*model.Burrow, error) {
@@ -66,14 +66,14 @@ func InitialStates() ([]*model.Burrow, error) {
 	return res, nil
 }
 
-func (svc *BurrowService) InitialBurrowStates(burrow *model.Burrow) error {
+func (svc *BurrowService) InitialBurrowStates() error {
 
 	burrows, err := InitialStates()
 	if err != nil {
 		return err
 	}
 
-	if err := svc.storage.CreateManyBurrow(burrows); err != nil {
+	if err := svc.Storage.CreateManyBurrow(burrows); err != nil {
 		return err
 	}
 	return nil
