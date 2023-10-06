@@ -3,8 +3,8 @@ CREATE TABLE burrow
     id           bigserial                            NOT NULL,
     uuid         UUID      DEFAULT uuid_generate_v4() NOT NULL,
     name         character varying(50),
-    depth        numeric(5, 2),
-    width        numeric(5, 2),
+    depth        float,
+    width        float,
     occupied     BOOLEAN,
     age          INT,
 

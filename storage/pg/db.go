@@ -1,4 +1,4 @@
-package services
+package pg
 
 import (
 	"fmt"
@@ -6,19 +6,20 @@ import (
 	"os"
 	"time"
 
+	"github.com/hamdiBouhani/GopherNet-golang/storage/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type DBService struct {
+type DBConn struct {
 	Db *gorm.DB
 }
 
-func NewDBService() *DBService {
-	return &DBService{}
+func NewDBConn() *DBConn {
+	return &DBConn{}
 }
 
-func (svc *DBService) Connection() error {
+func (svc *DBConn) CreateConnection() error {
 	log.Println("Using Postgres Database")
 	port := os.Getenv("DB_PORT")
 	if port == "" {
@@ -45,9 +46,25 @@ func (svc *DBService) Connection() error {
 	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
 	sqlDB.SetConnMaxLifetime(5 * time.Second)
 	svc.Db = db
-
 	return nil
+}
 
+func (svc *DBConn) Close() error {
+	db, err := svc.Db.DB()
+	if err != nil {
+		return err
+	}
+	return db.Close()
+}
 
+func (svc *DBConn) Migrate() error {
+	return svc.Db.AutoMigrate(
+		&model.Burrow{},
+	)
+}
 
+func (svc *DBConn) Drop() error {
+	return svc.Db.Migrator().DropTable(
+		&model.Burrow{},
+	)
 }
