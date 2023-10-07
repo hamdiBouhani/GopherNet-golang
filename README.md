@@ -42,7 +42,19 @@ then in another terminal:
 ```bash
 curl -X GET http://localhost:8080/burrows
 ```
-or install jq and run:
+
+---
+
+or install jq:
+```bash
+# For Linux
+sudo apt-get update && sudo apt-get install jq
+# For Mac
+brew install jq
+# For Windows with chocolatey
+chocolatey install jq
+```
+and run:
 ```bash
 sudo chmod +x ./curl_burrow_status.sh 
 ./curl_burrow_status.sh
