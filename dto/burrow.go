@@ -1,6 +1,9 @@
 package dto
 
-import "github.com/hamdiBouhani/GopherNet-golang/storage/model"
+import (
+	"github.com/google/uuid"
+	"github.com/hamdiBouhani/GopherNet-golang/storage/model"
+)
 
 type BurrowDto struct {
 	Name     string  `json:"name"`
@@ -17,5 +20,6 @@ func (b *BurrowDto) ParseToModel() *model.Burrow {
 		Wide:     b.Wide,
 		Occupied: b.Occupied,
 		Age:      b.Age,
+		UUID:     uuid.New(),
 	}
 }

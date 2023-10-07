@@ -1,13 +1,21 @@
 package pg
 
-import "github.com/hamdiBouhani/GopherNet-golang/storage/model"
+import (
+	"fmt"
+
+	"github.com/hamdiBouhani/GopherNet-golang/storage/model"
+)
 
 func (svc *DBConn) CreateBurrow(burrow *model.Burrow) error {
 	return svc.Db.Create(burrow).Error
 }
 
 func (svc *DBConn) CreateManyBurrow(burrowList []*model.Burrow) error {
-	return svc.Db.Create(burrowList).Error
+
+	result := svc.Db.Create(burrowList) // pass a slice to insert multiple row
+
+	fmt.Println("inserted records count", result.RowsAffected) // returns inserted records count
+	return result.Error                                        // returns error
 }
 
 func (svc *DBConn) IndexBurrow() ([]*model.Burrow, error) {

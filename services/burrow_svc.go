@@ -74,7 +74,8 @@ func (svc *BurrowService) InitialBurrowStates() error {
 		return err
 	}
 
-	if err := svc.Storage.CreateManyBurrow(burrows); err != nil {
+	err = svc.Storage.CreateManyBurrow(burrows)
+	if err != nil {
 		return err
 	}
 	return nil
@@ -126,10 +127,14 @@ func (svc *BurrowService) BurrowStatus() ([]*model.Burrow, error) {
 	return res, nil
 }
 
-func (svc *BurrowService) Run() error {
+func (svc *BurrowService) RunUpdateStatusTask() error {
 	burrows, err := svc.Storage.IndexBurrow() // Index the burrows
 	if err != nil {
 		return err
+	}
+
+	if len(burrows) == 0 {
+		return fmt.Errorf("no burrows found")
 	}
 
 	for _, burrow := range burrows {
