@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,6 +14,7 @@ import (
 	"github.com/hamdiBouhani/GopherNet-golang/dto"
 	"github.com/hamdiBouhani/GopherNet-golang/storage"
 	"github.com/hamdiBouhani/GopherNet-golang/storage/model"
+	"github.com/hamdiBouhani/GopherNet-golang/utils"
 )
 
 type BurrowService struct {
@@ -152,11 +155,11 @@ func (svc *BurrowService) RunUpdateStatusTask(duration time.Duration) error {
 
 				if b.Occupied && ((b.Age / 1440) >= 25) { //Burrow age (A, in minutes), with each burrow lasting exactly 25 days before collapsing.
 					b.Occupied = false
-					svc.Storage.UpdateBurrowAttributes(map[string]interface{}{"occupied": false, "age": b.Age, "depth": b.Depth})
+					svc.Storage.UpdateBurrowAttributes(b.ID, map[string]interface{}{"occupied": false, "age": b.Age, "depth": b.Depth})
 				} else {
-					svc.Storage.UpdateBurrowAttributes(map[string]interface{}{"age": b.Age, "depth": b.Depth})
+					svc.Storage.UpdateBurrowAttributes(b.ID, map[string]interface{}{"age": b.Age, "depth": b.Depth})
 				}
-
+				log.Printf("Burrow state: %+v\n", b)
 			}
 
 			// Create a ticker that triggers every minute
@@ -169,5 +172,86 @@ func (svc *BurrowService) RunUpdateStatusTask(duration time.Duration) error {
 		}()
 	}
 
+	return nil
+}
+
+// Reporting: Create a report summarising the total depth and number of available
+// burrows, as well as the largest and smallest burrows - by volume.
+// You can assume the burrows are cylindrical (where width is the diameter).
+// This reportshould be outputted as a plain text file every 10 minutes.
+func (svc *BurrowService) Report() error {
+
+	// Get the current working directory
+	currentDir, err := os.Getwd()
+	if err != nil {
+		fmt.Printf("Failed to get the current working directory: %v\n", err)
+		return err
+	}
+
+	dataDir := strings.TrimSuffix(currentDir, "services")
+	// Create the absolute path to the JSON file
+	fileName := filepath.Join(dataDir, "report.txt")
+
+	// Create a ticker that triggers every minute
+	ticker := time.NewTicker(10 * time.Minute)
+	// Run the job when the ticker triggers
+	for range ticker.C {
+
+		burrows, err := svc.Storage.IndexBurrow()
+		if err != nil {
+			return err
+		}
+
+		if len(burrows) == 0 {
+			return fmt.Errorf("Report : no burrows found")
+		}
+
+		// Calculate total depth, number of burrows, and find the largest and smallest burrows
+		var totalDepth float64
+		var largestVolume float64 = 0
+		var smallestVolume float64 = math.MaxFloat64
+		var largestBurrow *model.Burrow
+		var smallestBurrow *model.Burrow
+
+		for _, burrow := range burrows {
+			totalDepth += burrow.Depth
+
+			volume := utils.CalculateVolume(burrow)
+			if volume > largestVolume {
+				largestVolume = volume
+				largestBurrow = burrow
+			}
+			if volume < smallestVolume {
+				smallestVolume = volume
+				smallestBurrow = burrow
+			}
+		}
+
+		// Prepare the report
+		report := fmt.Sprintf("Report (Generated at %s):\n", time.Now())
+		report += fmt.Sprintf("Total Depth: %.2f\n", totalDepth)
+		report += fmt.Sprintf("Number of Burrows: %d\n", len(burrows))
+		report += fmt.Sprintf("Largest Burrow - Name: %s, Volume: %.2f\n", largestBurrow.Name, largestVolume)
+		report += fmt.Sprintf("Smallest Burrow - Name: %s, Volume: %.2f\n", smallestBurrow.Name, smallestVolume)
+
+		// Open the file in write mode
+		file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+		if err != nil {
+			fmt.Printf("Error opening file: %v\n", err)
+			return err
+		}
+
+		// Write the report to the file
+		if _, err := file.WriteString(report); err != nil {
+			fmt.Printf("Error writing to file: %v\n", err)
+		}
+
+		// Close the file
+		if err := file.Close(); err != nil {
+			fmt.Printf("Error closing file: %v\n", err)
+		}
+
+		fmt.Println("Report generated and saved to", fileName)
+	}
 	return nil
 }

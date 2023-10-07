@@ -13,5 +13,5 @@ type Storage interface {
 	IndexBurrow() ([]*model.Burrow, error)
 	SaveBurrow(burrow *model.Burrow) error
 	ShowBurrow(id int64) (*model.Burrow, error)
-	UpdateBurrowAttributes(attributes map[string]interface{}) error
+	UpdateBurrowAttributes(id int64, attributes map[string]interface{}) error
 }

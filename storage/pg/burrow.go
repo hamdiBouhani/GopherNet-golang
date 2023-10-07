@@ -40,6 +40,6 @@ func (svc *DBConn) ShowBurrow(id int64) (*model.Burrow, error) {
 	return &burrow, nil
 }
 
-func (svc *DBConn) UpdateBurrowAttributes(attributes map[string]interface{}) error {
-	return svc.Db.Model(&model.Burrow{}).Updates(attributes).Error
+func (svc *DBConn) UpdateBurrowAttributes(id int64, attributes map[string]interface{}) error {
+	return svc.Db.Model(&model.Burrow{}).Where(" id = ?", id).Updates(attributes).Error
 }
