@@ -59,3 +59,11 @@ and run:
 sudo chmod +x ./curl_burrow_status.sh 
 ./curl_burrow_status.sh
 ```
+
+
+```bash
+sudo chmod +x ./curl_rent_burrow.sh 
+./curl_rent_burrow.sh 9
+
+9 is the burrow id
+```

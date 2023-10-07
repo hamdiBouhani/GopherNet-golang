@@ -17,8 +17,9 @@ import (
 func (svc *HttpService) RentBurrow(c *gin.Context) {
 
 	id := c.Param("id")
+	fmt.Printf(" rent burrow id: %s\n", id)
 	burrowId, err := strconv.ParseInt(id, 10, 64)
-	if err == nil {
+	if err != nil {
 		fmt.Printf("%d of type %T", burrowId, burrowId)
 		svc.ErrorWithJson(c, 400, err)
 		return
@@ -30,7 +31,7 @@ func (svc *HttpService) RentBurrow(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, dto.SuccessResponse{Success: true, Error: nil})
+	c.JSON(200, dto.SuccessResponse{Success: true})
 }
 
 // @Summary Show Burrow Status

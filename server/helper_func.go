@@ -10,7 +10,7 @@ func (svc *HttpService) ErrorWithJson(c *gin.Context, code int, err error) {
 
 	c.AbortWithStatusJSON(code, &dto.SuccessResponse{
 		Success: false,
-		Error:   err,
+		Error:   err.Error(),
 	})
 
 }

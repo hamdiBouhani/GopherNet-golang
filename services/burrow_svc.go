@@ -108,7 +108,7 @@ func (svc *BurrowService) RentBurrow(id int64) error {
 		return err
 	}
 
-	if burrow.Occupied || burrow.Age > 25 {
+	if burrow.Occupied || ((burrow.Age / 1440) >= 25) {
 		return fmt.Errorf("burrow is not available")
 	}
 
