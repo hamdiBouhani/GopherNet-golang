@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/hamdiBouhani/GopherNet-golang/dto"
 	"github.com/hamdiBouhani/GopherNet-golang/storage"
@@ -123,4 +124,32 @@ func (svc *BurrowService) BurrowStatus() ([]*model.Burrow, error) {
 		return nil, err
 	}
 	return res, nil
+}
+
+func (svc *BurrowService) Run() error {
+	burrows, err := svc.Storage.IndexBurrow() // Index the burrows
+	if err != nil {
+		return err
+	}
+
+	for _, burrow := range burrows {
+		b := burrow
+		go func() {
+			job := func() {
+				fmt.Println("Running the job at", time.Now())
+				fmt.Printf("Burrow name: %s\n", b.Name)
+				// Add your job logic here
+			}
+
+			// Create a ticker that triggers every minute
+			ticker := time.NewTicker(1 * time.Minute)
+
+			// Run the job when the ticker triggers
+			for range ticker.C {
+				job() // Execute the job
+			}
+		}()
+	}
+
+	return nil
 }

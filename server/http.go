@@ -10,8 +10,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/hamdiBouhani/GopherNet-golang/services"
-	"github.com/hamdiBouhani/GopherNet-golang/storage"
-	"github.com/hamdiBouhani/GopherNet-golang/storage/pg"
 )
 
 type HttpService struct {
@@ -21,43 +19,22 @@ type HttpService struct {
 	port       string
 	corsConfig cors.Config
 
-	storage storage.Storage
-	svc     *services.BurrowService
+	BurrowServiceInstance *services.BurrowService
 
 	devMode  bool
 	testMode bool
 }
 
-func NewHttpService() *HttpService {
-	return &HttpService{}
-}
-
-func (svc *HttpService) Configure() error {
-	db := pg.NewDBConn()
-	err := db.CreateConnection()
-	if err != nil {
-		return err
+func NewHttpService(burrowServiceInstance *services.BurrowService) *HttpService {
+	svc := &HttpService{
+		BurrowServiceInstance: burrowServiceInstance,
 	}
 
-	err = db.Migrate()
-	if err != nil {
-		return err
-	}
-	svc.storage = db
-
-	burrowServiceInstance := services.NewBurrowService(db)
-	svc.svc = burrowServiceInstance
-
-	return nil
+	return svc
 }
 
 // Start the http service with given listeners and then listen on port
 func (svc *HttpService) Start() error {
-
-	err := svc.Configure()
-	if err != nil {
-		return err
-	}
 
 	var port = flag.String("port", "8080", "Http port to serve application on")
 	flag.Parse()
@@ -79,7 +56,7 @@ func (svc *HttpService) Start() error {
 		log.Println("-DEV_MODE enabled-")
 	}
 
-	err = svc.registerRoutes()
+	err := svc.registerRoutes()
 	if err != nil {
 		return err
 	}
