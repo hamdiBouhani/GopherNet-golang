@@ -9,9 +9,21 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	docs "github.com/hamdiBouhani/GopherNet-golang/docs" //Swagger definition
 	"github.com/hamdiBouhani/GopherNet-golang/services"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title GopherNet API
+// @version 1.0
+// @description GopherNet API
+
+// @host localhost:8080
+// @BasePath /api/v1
+// @query.collection.format multi
+
+// HttpService provides a HTTP Rest endpoint for the loading functions
 type HttpService struct {
 	router *gin.Engine
 
@@ -70,6 +82,7 @@ func (svc *HttpService) registerRoutes() error {
 	if svc.testMode {
 		gin.SetMode(gin.TestMode)
 	}
+	docs.SwaggerInfo.BasePath = "/api/v1"
 	svc.router = gin.Default()
 	svc.router.Use(cors.New(svc.corsConfig))
 
@@ -81,6 +94,7 @@ func (svc *HttpService) registerRoutes() error {
 
 func (svc *HttpService) Routes() {
 	svc.ns.GET("/ping", svc.ping) //PING/PONG
+	svc.ns.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	svc.ns.GET("/burrows", svc.BurrowStatus)
 	svc.ns.PUT("/rent-burrow/:id", svc.RentBurrow)
 }

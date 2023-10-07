@@ -1,0 +1,95 @@
+basePath: /api/v1
+definitions:
+  dto.IndexResponse:
+    properties:
+      count:
+        type: integer
+      results: {}
+    type: object
+  model.Burrow:
+    properties:
+      age:
+        type: integer
+      created_date:
+        type: string
+      deleted_at:
+        type: string
+      depth:
+        type: number
+      id:
+        type: integer
+      name:
+        type: string
+      occupied:
+        type: boolean
+      updated_date:
+        type: string
+      uuid:
+        type: string
+      wide:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: GopherNet API
+  title: GopherNet API
+  version: "1.0"
+paths:
+  /burrows:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.IndexResponse'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/model.Burrow'
+                  type: array
+              type: object
+      summary: Show Burrow Status
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: ping example
+  /rent-burrow/{id}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: UUID
+        in: path
+        name: uuid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Burrow'
+      summary: Rent Burrow
+swagger: "2.0"

@@ -6,3 +6,7 @@ startdb:
 	docker start postgis
 fmt:
 	go fmt ./... 
+coverage:
+	go test ./... -coverprofile cover.out
+docs:
+	swag init -g server/http.go --parseDependency
