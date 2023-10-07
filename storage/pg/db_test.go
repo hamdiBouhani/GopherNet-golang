@@ -34,6 +34,12 @@ func TestCreateConnection(t *testing.T) {
 
 	// Get generic database object sql.DB to use its functions
 	sqlDB, err := db.Db.DB()
+	if err != nil {
+		log.Printf("Error updating burrow: %v\n", err)
+		t.Error(err)
+		t.Fail()
+		return
+	}
 
 	// Ping
 	err = sqlDB.Ping()

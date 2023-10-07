@@ -36,6 +36,9 @@ func (svc *DBConn) CreateConnection() error {
 		return err
 	}
 	sqlDB, err := db.DB()
+	if err != nil {
+		log.Printf("Error updating burrow: %v\n", err)
+	}
 
 	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
 	sqlDB.SetMaxIdleConns(10)

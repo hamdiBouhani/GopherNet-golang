@@ -10,3 +10,5 @@ coverage:
 	go test ./... -coverprofile cover.out
 docs:
 	swag init -g server/http.go --parseDependency
+run-lint:
+	golangci-lint run

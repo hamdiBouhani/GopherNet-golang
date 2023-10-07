@@ -155,9 +155,16 @@ func (svc *BurrowService) RunUpdateStatusTask(duration time.Duration) error {
 
 				if b.Occupied && ((b.Age / 1440) >= 25) { //Burrow age (A, in minutes), with each burrow lasting exactly 25 days before collapsing.
 					b.Occupied = false
-					svc.Storage.UpdateBurrowAttributes(b.ID, map[string]interface{}{"occupied": false, "age": b.Age, "depth": b.Depth})
+					err := svc.Storage.UpdateBurrowAttributes(b.ID, map[string]interface{}{"occupied": false, "age": b.Age, "depth": b.Depth})
+					if err != nil {
+						log.Printf("Error updating burrow: %v\n", err)
+					}
+
 				} else {
-					svc.Storage.UpdateBurrowAttributes(b.ID, map[string]interface{}{"age": b.Age, "depth": b.Depth})
+					err := svc.Storage.UpdateBurrowAttributes(b.ID, map[string]interface{}{"age": b.Age, "depth": b.Depth})
+					if err != nil {
+						log.Printf("Error updating burrow: %v\n", err)
+					}
 				}
 				log.Printf("Burrow state: %+v\n", b)
 			}

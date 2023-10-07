@@ -67,3 +67,20 @@ sudo chmod +x ./curl_rent_burrow.sh
 
 9 is the burrow id
 ```
+
+---
+
+1. **Install golangci-lint**:
+   ```bash
+   # binary will be $(go env GOPATH)/bin/golangci-lint
+   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
+
+    golangci-lint --version
+   ```
+
+2. **Run linter**:
+
+   ```bash
+   make run-lint
+   ```
+

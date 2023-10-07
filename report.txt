@@ -1,0 +1,6 @@
+Report (Generated at 2023-10-07 14:47:34.240558359 +0200 CEST m=+600.080098864):
+Total Depth: 329817122322973576555994841874432.00
+Number of Burrows: 10
+Largest Burrow - Name: The Molehole, Volume: 11959699649.00
+Smallest Burrow - Name: The Underground Palace, Volume: 0.00
+--------------------------------
