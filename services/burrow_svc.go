@@ -127,7 +127,7 @@ func (svc *BurrowService) BurrowStatus() ([]*model.Burrow, error) {
 	return res, nil
 }
 
-func (svc *BurrowService) RunUpdateStatusTask() error {
+func (svc *BurrowService) RunUpdateStatusTask(duration time.Duration) error {
 	burrows, err := svc.Storage.IndexBurrow() // Index the burrows
 	if err != nil {
 		return err
@@ -143,11 +143,24 @@ func (svc *BurrowService) RunUpdateStatusTask() error {
 			job := func() {
 				fmt.Println("Running the job at", time.Now())
 				fmt.Printf("Burrow name: %s\n", b.Name)
-				// Add your job logic here
+				b.Age++
+				fmt.Printf("Burrow name: %s age increased to %d at % v \n", b.Name, b.Age, time.Now())
+
+				if b.Occupied {
+					b.Depth += (b.Depth * 0.9)
+				}
+
+				if b.Occupied && ((b.Age / 1440) >= 25) { //Burrow age (A, in minutes), with each burrow lasting exactly 25 days before collapsing.
+					b.Occupied = false
+					svc.Storage.UpdateBurrowAttributes(map[string]interface{}{"occupied": false, "age": b.Age, "depth": b.Depth})
+				} else {
+					svc.Storage.UpdateBurrowAttributes(map[string]interface{}{"age": b.Age, "depth": b.Depth})
+				}
+
 			}
 
 			// Create a ticker that triggers every minute
-			ticker := time.NewTicker(1 * time.Minute)
+			ticker := time.NewTicker(duration)
 
 			// Run the job when the ticker triggers
 			for range ticker.C {

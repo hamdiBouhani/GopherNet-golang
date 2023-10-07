@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/hamdiBouhani/GopherNet-golang/mocks"
 	"github.com/hamdiBouhani/GopherNet-golang/storage/pg"
@@ -142,4 +143,68 @@ func TestRentBurrow(t *testing.T) {
 		t.Fail()
 		return
 	}
+}
+
+func TestRunUpdateStatusTask(t *testing.T) {
+	svc := MockBurrowService()
+
+	newBurrow := mocks.MockBurrow(false)
+	err := svc.Storage.CreateBurrow(newBurrow)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	err = svc.RentBurrow(newBurrow.ID)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	burrow1, err := svc.Storage.ShowBurrow(newBurrow.ID)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	if !burrow1.Occupied {
+		t.Error("burrow should be occupied")
+		t.Fail()
+		return
+	}
+
+	sleepDuration := 10 * time.Second
+	err = svc.RunUpdateStatusTask(10 * time.Second)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	fmt.Println("Sleeping for", sleepDuration)
+	time.Sleep(sleepDuration)
+	fmt.Println("Action performed at", time.Now())
+	burrow2, err := svc.Storage.ShowBurrow(newBurrow.ID)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	if burrow2.Depth < burrow1.Depth {
+		t.Error("burrow depth should be less than before")
+		t.Fail()
+		return
+	}
+
+	err = svc.Storage.Drop()
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
 }

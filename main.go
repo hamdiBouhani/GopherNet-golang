@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/hamdiBouhani/GopherNet-golang/server"
 	"github.com/hamdiBouhani/GopherNet-golang/services"
@@ -21,7 +22,7 @@ func NewRestCmd(burrowServiceInstance *services.BurrowService) *cobra.Command {
 
 			go func() {
 
-				err := burrowServiceInstance.RunUpdateStatusTask()
+				err := burrowServiceInstance.RunUpdateStatusTask(1 * time.Minute)
 				if err != nil {
 					log.Fatalf(err.Error())
 				}
