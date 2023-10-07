@@ -23,6 +23,13 @@ func MockBurrowService() *BurrowService {
 		panic("failed to connect database")
 	}
 	service := &BurrowService{Storage: &pg.DBConn{Db: db}}
+
+	err = service.Storage.Drop()
+	if err != nil {
+		fmt.Println(err)
+		panic("failed to connect database")
+	}
+
 	err = service.Storage.Migrate()
 	if err != nil {
 		fmt.Println(err)
@@ -96,13 +103,6 @@ func TestInitialBurrowStates(t *testing.T) {
 		t.Fail()
 		return
 	}
-
-	err = svc.Storage.Drop()
-	if err != nil {
-		t.Error(err)
-		t.Fail()
-		return
-	}
 }
 
 func TestRentBurrow(t *testing.T) {
@@ -133,13 +133,6 @@ func TestRentBurrow(t *testing.T) {
 
 	if !updatedBurrow.Occupied {
 		t.Error("burrow should be occupied")
-		t.Fail()
-		return
-	}
-
-	err = svc.Storage.Drop()
-	if err != nil {
-		t.Error(err)
 		t.Fail()
 		return
 	}
@@ -200,11 +193,28 @@ func TestRunUpdateStatusTask(t *testing.T) {
 		return
 	}
 
-	err = svc.Storage.Drop()
+}
+
+func TestReport(t *testing.T) {
+	svc := MockBurrowService()
+
+	err := svc.InitialBurrowStates()
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+	_, err = svc.Storage.IndexBurrow() // Index the burrows
 	if err != nil {
 		t.Error(err)
 		t.Fail()
 		return
 	}
 
+	err = svc.Report(10 * time.Second)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
 }

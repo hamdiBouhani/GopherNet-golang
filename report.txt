@@ -1,0 +1,5 @@
+Report (Generated at 2023-10-07 12:19:10.765711208 +0200 CEST m=+20.287585418):
+Total Depth: 25.04
+Number of Burrows: 5
+Largest Burrow - Name: The Underground Palace, Volume: 20.40
+Smallest Burrow - Name: Surface Level Statis, Volume: 0.00

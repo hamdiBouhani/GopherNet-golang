@@ -12,7 +12,7 @@ type Burrow struct {
 
 	Name     string  `json:"name" gorm:"column:name"`
 	Depth    float64 `json:"depth" gorm:"column:depth"`
-	Wide     float64 `json:"wide" gorm:"column:wide"`
+	Width    float64 `json:"wide" gorm:"column:width"`
 	Occupied bool    `json:"occupied" gorm:"column:occupied"`
 	Age      int     `json:"age" gorm:"column:age"`
 

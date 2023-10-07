@@ -27,12 +27,12 @@ func NewRestCmd(burrowServiceInstance *services.BurrowService) *cobra.Command {
 				}
 			}()
 
-			// go func() {
-			// 	err := burrowServiceInstance.Report(10 * time.Minute)
-			// 	if err != nil {
-			// 		log.Fatalf(err.Error())
-			// 	}
-			// }()
+			go func() {
+				err := burrowServiceInstance.Report(10 * time.Minute)
+				if err != nil {
+					log.Fatalf(err.Error())
+				}
+			}()
 
 			err := server.NewHttpService(burrowServiceInstance).Start()
 			if err != nil {

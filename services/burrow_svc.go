@@ -217,7 +217,8 @@ func (svc *BurrowService) Report(duration time.Duration) error {
 			totalDepth += burrow.Depth
 
 			volume := utils.CalculateVolume(burrow)
-			if volume > largestVolume {
+			fmt.Printf("Burrow name: %s, Volume: %.2f\n", burrow.Name, volume)
+			if volume >= largestVolume {
 				largestVolume = volume
 				largestBurrow = burrow
 			}

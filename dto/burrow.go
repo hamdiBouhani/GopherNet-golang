@@ -8,7 +8,7 @@ import (
 type BurrowDto struct {
 	Name     string  `json:"name"`
 	Depth    float64 `json:"depth"`
-	Wide     float64 `json:"wide"`
+	Width    float64 `json:"width"`
 	Occupied bool    `json:"occupied"`
 	Age      int     `json:"age"`
 }
@@ -17,7 +17,7 @@ func (b *BurrowDto) ParseToModel() *model.Burrow {
 	return &model.Burrow{
 		Name:     b.Name,
 		Depth:    b.Depth,
-		Wide:     b.Wide,
+		Width:    b.Width,
 		Occupied: b.Occupied,
 		Age:      b.Age,
 		UUID:     uuid.New(),
