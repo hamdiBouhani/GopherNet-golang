@@ -22,3 +22,27 @@ Number of Burrows: 10
 Largest Burrow - Name: The Molehole, Volume: 2756311529172209664.00
 Smallest Burrow - Name: The Underground Palace, Volume: 0.00
 --------------------------------
+Report (Generated at 2023-10-08 01:21:45.049950468 +0200 CEST m=+3000.098205884):
+Total Depth: 46603360722385117336993175577170437398855680.00
+Number of Burrows: 10
+Largest Burrow - Name: The Molehole, Volume: 1689912861249561952256.00
+Smallest Burrow - Name: Surface Level Statis, Volume: 0.00
+--------------------------------
+Report (Generated at 2023-10-08 01:31:45.046956917 +0200 CEST m=+3600.095212356):
+Total Depth: 28572829242514386517089299421296511814830391296.00
+Number of Burrows: 10
+Largest Burrow - Name: The Molehole, Volume: 1036096772223113558491136.00
+Smallest Burrow - Name: The Underground Palace, Volume: 0.00
+--------------------------------
+Report (Generated at 2023-10-08 01:41:45.002156459 +0200 CEST m=+4200.050411905):
+Total Depth: 17518190925868967325648288682292468867528109588480.00
+Number of Burrows: 10
+Largest Burrow - Name: The Molehole, Volume: 635237795999366295022731264.00
+Smallest Burrow - Name: Surface Level Statis, Volume: 0.00
+--------------------------------
+Report (Generated at 2023-10-08 01:51:45.005832763 +0200 CEST m=+4800.054088182):
+Total Depth: 10740518928331093600008864575541011198761752279908352.00
+Number of Burrows: 10
+Largest Burrow - Name: The Molehole, Volume: 389468501673159137271713103872.00
+Smallest Burrow - Name: Tunnel of Mystery, Volume: 0.00
+--------------------------------
