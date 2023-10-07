@@ -75,12 +75,13 @@ func (svc *HttpService) registerRoutes() error {
 
 	svc.ns = svc.router.Group("/api/v1")
 
-	svc.generalRoutes()
+	svc.Routes()
 	return nil
 }
 
-func (svc *HttpService) generalRoutes() {
+func (svc *HttpService) Routes() {
 	svc.ns.GET("/ping", svc.ping) //PING/PONG
+	svc.ns.GET("/burrows", svc.BurrowStatus)
 }
 
 // PingExample godoc

@@ -179,7 +179,7 @@ func (svc *BurrowService) RunUpdateStatusTask(duration time.Duration) error {
 // burrows, as well as the largest and smallest burrows - by volume.
 // You can assume the burrows are cylindrical (where width is the diameter).
 // This reportshould be outputted as a plain text file every 10 minutes.
-func (svc *BurrowService) Report() error {
+func (svc *BurrowService) Report(duration time.Duration) error {
 
 	// Get the current working directory
 	currentDir, err := os.Getwd()
@@ -193,7 +193,7 @@ func (svc *BurrowService) Report() error {
 	fileName := filepath.Join(dataDir, "report.txt")
 
 	// Create a ticker that triggers every minute
-	ticker := time.NewTicker(10 * time.Minute)
+	ticker := time.NewTicker(duration)
 	// Run the job when the ticker triggers
 	for range ticker.C {
 
