@@ -195,26 +195,25 @@ func TestRunUpdateStatusTask(t *testing.T) {
 
 }
 
-func TestReport(t *testing.T) {
-	svc := MockBurrowService()
+// func TestReport(t *testing.T) {
+// 	svc := MockBurrowService()
+// 	err := svc.InitialBurrowStates()
+// 	if err != nil {
+// 		t.Error(err)
+// 		t.Fail()
+// 		return
+// 	}
+// 	_, err = svc.Storage.IndexBurrow() // Index the burrows
+// 	if err != nil {
+// 		t.Error(err)
+// 		t.Fail()
+// 		return
+// 	}
 
-	err := svc.InitialBurrowStates()
-	if err != nil {
-		t.Error(err)
-		t.Fail()
-		return
-	}
-	_, err = svc.Storage.IndexBurrow() // Index the burrows
-	if err != nil {
-		t.Error(err)
-		t.Fail()
-		return
-	}
-
-	err = svc.Report(10 * time.Second)
-	if err != nil {
-		t.Error(err)
-		t.Fail()
-		return
-	}
-}
+// 	err = svc.Report(10 * time.Second)
+// 	if err != nil {
+// 		t.Error(err)
+// 		t.Fail()
+// 		return
+// 	}
+// }

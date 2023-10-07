@@ -236,7 +236,7 @@ func (svc *BurrowService) Report(duration time.Duration) error {
 		report += fmt.Sprintf("Smallest Burrow - Name: %s, Volume: %.2f\n", smallestBurrow.Name, smallestVolume)
 
 		// Open the file in write mode
-		file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+		file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			fmt.Printf("Error opening file: %v\n", err)
 			return err
@@ -244,6 +244,11 @@ func (svc *BurrowService) Report(duration time.Duration) error {
 
 		// Write the report to the file
 		if _, err := file.WriteString(report); err != nil {
+			fmt.Printf("Error writing to file: %v\n", err)
+		}
+
+		// Write the report to the file
+		if _, err := file.WriteString("--------------------------------\n"); err != nil {
 			fmt.Printf("Error writing to file: %v\n", err)
 		}
 

@@ -28,7 +28,8 @@ func NewRestCmd(burrowServiceInstance *services.BurrowService) *cobra.Command {
 			}()
 
 			go func() {
-				err := burrowServiceInstance.Report(10 * time.Minute)
+				d := 10 * time.Minute
+				err := burrowServiceInstance.Report(d)
 				if err != nil {
 					log.Fatalf(err.Error())
 				}

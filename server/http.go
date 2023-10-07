@@ -82,6 +82,7 @@ func (svc *HttpService) registerRoutes() error {
 func (svc *HttpService) Routes() {
 	svc.ns.GET("/ping", svc.ping) //PING/PONG
 	svc.ns.GET("/burrows", svc.BurrowStatus)
+	svc.ns.PUT("/rent-burrow/:id", svc.RentBurrow)
 }
 
 // PingExample godoc

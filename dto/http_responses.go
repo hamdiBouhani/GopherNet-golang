@@ -1,9 +1,8 @@
 package dto
 
 type SuccessResponse struct {
-	Success   bool   `json:"success"`
-	Error     string `json:"error"`
-	ErrorCode string `json:"error_code"`
+	Success bool  `json:"success"`
+	Error   error `json:"error"`
 }
 
 type IndexResponse struct {

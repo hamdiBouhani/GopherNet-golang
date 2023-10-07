@@ -1,26 +1,36 @@
 package server
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/hamdiBouhani/GopherNet-golang/dto"
-	"github.com/hamdiBouhani/GopherNet-golang/storage/model"
 )
 
-// @Summary Show Burrow
+// @Summary Rent Burrow
 // @Accept  json
 // @Produce json
 // @Param uuid path int64 true "UUID"
 // @Success 200 {object} model.Burrow
-// @Router /burrow/{id} [get]
-func (svc *HttpService) Show(c *gin.Context) {
-	// uid := c.Param("id")
-	// if _, err := uuid.Parse(uid); err != nil {
-	// 	svc.ErrorWithJson(c, 400, err)
-	// 	return
-	// }
-	var resp model.Burrow
+// @Router /rent-burrow/{id} [put]
+func (svc *HttpService) RentBurrow(c *gin.Context) {
 
-	c.JSON(200, resp)
+	id := c.Param("id")
+	burrowId, err := strconv.ParseInt(id, 10, 64)
+	if err == nil {
+		fmt.Printf("%d of type %T", burrowId, burrowId)
+		svc.ErrorWithJson(c, 400, err)
+		return
+	}
+
+	err = svc.BurrowServiceInstance.RentBurrow(burrowId)
+	if err != nil {
+		svc.ErrorWithJson(c, 500, err)
+		return
+	}
+
+	c.JSON(200, dto.SuccessResponse{Success: true, Error: nil})
 }
 
 // @Summary Show Burrow Status
