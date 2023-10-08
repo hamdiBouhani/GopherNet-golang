@@ -113,3 +113,41 @@ func TestBurrowStatusAPI(t *testing.T) {
 		return
 	}
 }
+
+func TestRentBurrowAPI(t *testing.T) {
+	httpmock := mockHttpService()
+
+	newBurrow := mocks.MockBurrow(false)
+	err := httpmock.BurrowServiceInstance.Storage.CreateBurrow(newBurrow)
+	if err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("/api/v1/rent-burrow/%d", newBurrow.ID), nil)
+	httpmock.router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp dto.SuccessResponse
+	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
+		t.Error(err)
+		t.Fail()
+		return
+	}
+
+	if !resp.Success {
+		t.Errorf("response should be true, got %v", resp.Success)
+		t.Errorf("Error:  %s", resp.Error)
+		t.Fail()
+		return
+	}
+
+	w1 := httptest.NewRecorder()
+	req1, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("/api/v1/rent-burrow/%d", newBurrow.ID), nil)
+	httpmock.router.ServeHTTP(w1, req1)
+
+	assert.Equal(t, 500, w1.Code)
+}
