@@ -10,7 +10,6 @@ make createdb
 ```
 ## Usage
 ```bash
-    2023/10/07 10:58:51 Using Postgres Database
     Usage:
     gopherne [flags]
     gopherne [command]
@@ -37,13 +36,10 @@ to test the rest server:
 go run main.go rest
 ```
 
-
 then in another terminal:
 ```bash
 curl -X GET http://localhost:8080/burrows
 ```
-
----
 
 or install jq:
 ```bash
@@ -71,16 +67,48 @@ sudo chmod +x ./curl_rent_burrow.sh
 ---
 
 1. **Install golangci-lint**:
-   ```bash
-   # binary will be $(go env GOPATH)/bin/golangci-lint
-   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 
-    golangci-lint --version
-   ```
+```bash
+# binary will be $(go env GOPATH)/bin/golangci-lint
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
+
+golangci-lint --version
+```
 
 2. **Run linter**:
 
-   ```bash
-   make run-lint
-   ```
+```bash
+make run-lint
+```
 
+--- 
+
+## Solutions
+
+
+1 - **Requirements 1:**
+
+I created command line application to load the initial burrows from `data/initial.json` file.
+
+Load the initial burrows:
+```bash
+go run main.go load-burrows
+```
+
+2 - **Requirements 2:**
+
+I used golang [Ticker](https://gobyexample.com/tickers) to run background task to Update the burrows status every 5 seconds.
+
+
+3/4 - **Requirements 3 / 4:**
+
+I created a rest server to manage the burrows.  
+
+to run the rest server:
+```bash
+go run main.go rest
+```
+
+5 - **Requirements r:**
+
+I used golang [Ticker](https://gobyexample.com/tickers) to run background task to Create a report  summarising the total depth and number of available burrows.
