@@ -9,6 +9,7 @@ import (
 	"github.com/hamdiBouhani/GopherNet-golang/storage/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type DBConn struct {
@@ -30,8 +31,22 @@ func (svc *DBConn) CreateConnection() error {
 	if ssl == "" {
 		ssl = "disable"
 	}
+
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold:             time.Second,   // Slow SQL threshold
+			LogLevel:                  logger.Silent, // Log level
+			IgnoreRecordNotFoundError: true,          // Ignore ErrRecordNotFound error for logger
+			ParameterizedQueries:      true,          // Don't include params in the SQL log
+			Colorful:                  false,         // Disable color
+		},
+	)
+
 	dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s", os.Getenv("DB_URL"), port, os.Getenv("DB_USER"), os.Getenv("DB_DATABASE"), ssl, os.Getenv("DB_PASS"))
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: newLogger,
+	})
 	if err != nil {
 		return err
 	}
