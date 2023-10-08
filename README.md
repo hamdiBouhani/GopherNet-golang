@@ -217,6 +217,19 @@ to run the rest server:
 go run main.go rest
 ```
 
+```bash
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /api/v1/ping              --> github.com/hamdiBouhani/GopherNet-golang/server.(*HttpService).ping-fm (4 handlers)
+[GIN-debug] GET    /api/v1/swagger/*any      --> github.com/swaggo/gin-swagger.CustomWrapHandler.func1 (4 handlers)
+[GIN-debug] GET    /api/v1/burrows           --> github.com/hamdiBouhani/GopherNet-golang/server.(*HttpService).BurrowStatus-fm (4 handlers)
+[GIN-debug] PUT    /api/v1/rent-burrow/:id   --> github.com/hamdiBouhani/GopherNet-golang/server.(*HttpService).RentBurrow-fm (4 handlers)
+```
+
 **Requirements 5:**
 
 I used golang [Ticker](https://gobyexample.com/tickers) to run background task to Create a report  summarising the total depth and number of available burrows.
