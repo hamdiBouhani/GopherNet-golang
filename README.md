@@ -11,6 +11,8 @@ a platform for managing rentals of gopher burrows.
 ├── cloud_architecture.drawio.png
 ├── cloud_architecture.png
 ├── cmd
+│   ├── commands.go
+│   └── root.go
 ├── cover.out
 ├── curl_burrow_status.sh
 ├── curl_rent_burrow.sh
@@ -28,7 +30,7 @@ a platform for managing rentals of gopher burrows.
 ├── go.sum
 ├── LICENSE
 ├── main.go
-├── Makefile
+├── makefile
 ├── mocks
 │   └── fakes.go
 ├── README.md
